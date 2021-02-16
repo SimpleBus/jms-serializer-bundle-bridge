@@ -16,20 +16,19 @@ class JMSSerializerMessageSerializerTest extends KernelTestCase
         parent::tearDown();
 
         static::$class = null;
-        static::$kernel = null;
     }
 
     /**
      * @test
      */
-    public function itSerializesAndDeserializesMessagesInEnvelopes()
+    public function itSerializesAndDeserializesMessagesInEnvelopes(): void
     {
         $kernel = $this->createKernel([
             'debug' => false,
         ]);
         $kernel->boot();
-        $messageSerializer = $kernel->getContainer()->get('public_message_serializer');
         /** @var MessageInEnvelopeSerializer $messageSerializer */
+        $messageSerializer = $kernel->getContainer()->get('public_message_serializer');
         $originalMessage = new SampleMessage('test', 123);
 
         $serializedMessageEnvelope = $messageSerializer->wrapAndSerialize($originalMessage);
@@ -37,8 +36,8 @@ class JMSSerializerMessageSerializerTest extends KernelTestCase
         $this->assertEquals($deserializedEnvelope->message(), $originalMessage);
     }
 
-    protected static function getKernelClass()
+    protected static function getKernelClass(): string
     {
-        return 'SimpleBus\JMSSerializerBundleBridge\Tests\Functional\TestKernel';
+        return TestKernel::class;
     }
 }
